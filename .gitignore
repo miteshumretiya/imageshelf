@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+
+# PyInstaller output (the .spec file IS tracked)
+build/
+dist/
+
+# Generated test data and results
+sample_images/
+big_images/
+benchmarks/results.md
+*.csv
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

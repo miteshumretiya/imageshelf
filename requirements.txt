@@ -1,0 +1,6 @@
+# Run the application
+PyQt6>=6.5
+
+# Develop, test and package
+pytest>=8.0
+pyinstaller>=6.0
