@@ -18,6 +18,8 @@ ImageShelf is a desktop image catalogue built with Python and PyQt6. Point it at
 
 ## Setup
 
+Run every command in this README from the project folder, the one that contains `main.py`.
+
 Windows (PowerShell):
 
 ```powershell
@@ -94,6 +96,8 @@ imageshelf.spec                 PyInstaller build configuration
 
 ## Troubleshooting
 
+- **`python main.py` opens no window and prints `can't open file ... main.py`:** you are in the wrong folder. `cd` into the folder that contains `main.py`, then create the samples again (`python tools/make_sample_images.py sample_images`). `pytest` still passes from the parent folder because it searches sub-folders, so it does not show this mistake.
 - **No sound:** check the system volume, and that the selected music file plays in another app.
+- **"Music is not available on this computer":** Qt found no multimedia backend (for example, a broken install or a build missing `plugins/multimedia`). The rest of the app still works; reinstall PyQt6 or rebuild with `pyinstaller imageshelf.spec`.
 - **Linux without a sound server crashes at start:** run with `QT_AUDIO_BACKEND=pulseaudio python main.py`.
 - **`ModuleNotFoundError: PyQt6`:** activate the virtual environment first.

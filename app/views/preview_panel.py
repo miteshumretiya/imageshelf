@@ -107,6 +107,13 @@ class PreviewPanel(QWidget):
         self.volume.valueChanged.connect(lambda v: self._audio_output.setVolume(v / 100))
         self._player.errorOccurred.connect(self._on_player_error)
 
+        # Without a Qt multimedia backend the player fails silently, so say so up front.
+        if not self._player.isAvailable():
+            self.music_button.setEnabled(False)
+            self.volume.setEnabled(False)
+            self.music_label.setText("Music is not available on this computer (no Qt multimedia "
+                                     "backend found). The slideshow will run without sound.")
+
         self.show_item(None)
 
     # ---- image preview -------------------------------------------------------------------
