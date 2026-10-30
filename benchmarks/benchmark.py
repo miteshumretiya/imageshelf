@@ -38,6 +38,7 @@ from PyQt6.QtCore import QSize  # noqa: E402
 from PyQt6.QtGui import QImage, QImageReader  # noqa: E402
 
 from app.services.image_service import analyse_file, scan_folder  # noqa: E402
+from app.services.thumbnailer import read_image_info  # noqa: E402
 
 
 # ----------------------------------------------------------------------------- workloads
@@ -63,6 +64,17 @@ def brightness_task(path: str) -> tuple[str, float, float]:
     n = max(len(data), 1)
     mean = total / n
     return Path(path).name, mean, (squares / n - mean * mean) ** 0.5
+
+
+def is_readable(path: Path) -> bool:
+    """Skip files the app would list in its Errors tab (e.g. the sample set's deliberate
+    empty.png and broken.jpg): they raise ValueError and would stop the timing runs."""
+    try:
+        read_image_info(path)
+    except ValueError:
+        print(f"Skipping unreadable file: {path}")
+        return False
+    return True
 
 
 WORKLOADS = {"analyse (hash + thumbnail)": analyse_task,
@@ -137,7 +149,7 @@ def main() -> None:
         subprocess.run([sys.executable, str(ROOT / "tools" / "make_sample_images.py"),
                         str(folder), "--big", str(args.create), "--only-big"], check=True)
 
-    paths = [str(p) for p in scan_folder(folder)]
+    paths = [str(p) for p in scan_folder(folder) if is_readable(p)]
     if not paths:
         sys.exit(f"No images found in {folder}")
     worker_counts = [int(w) for w in args.workers.split(",")]
